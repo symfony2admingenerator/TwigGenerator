@@ -4,13 +4,10 @@ TwigGenerator is a PHP code generator based on the [Twig](https://github.com/fab
 
 ## Installation
 
-Checkout this GitHub repository and setup the composer dependencies (Twig and Symfony ClassLoader):
+Use composer to take advantage of this bundle:
 
 ```
-git clone https://github.com/cedriclombardot/TwigGenerator.git
-cd TwigGenerator
-wget -nc http://getcomposer.org/composer.phar
-php composer.phar install
+composer require "symfony2admingenerator/twig-generator"
 ```
 
 ## Usage
@@ -125,8 +122,10 @@ class MyBuilder
 You can see some basic code generation samples in the tests, and on some GitHub repositories like [fzaninotto/Doctrine2ActiveRecord](https://github.com/fzaninotto/Doctrine2ActiveRecord), or [cedriclombardot/AdmingeneratorGeneratorBundle](https://github.com/cedriclombardot/AdmingeneratorGeneratorBundle).
 
 
-## Unit Tests
+## Running the tests
 
-Then, just run:
+After installing dependencies through composer, you can use phpunit from vendor files:
 
-    phpunit
+```
+   vendor/phpunit/phpunit/phpunit
+```
