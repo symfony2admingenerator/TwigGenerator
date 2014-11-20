@@ -273,7 +273,14 @@ abstract class BaseBuilder implements BuilderInterface
      */
     public function addTwigFilters(array $filters)
     {
-        $this->twigFilters = array_unique(array_merge($this->twigFilters, $filters));
+        foreach($filters as $filter) {
+            if (is_string($filter)) {
+                if (in_array($filter, $this->twigFilters)) {
+                    continue;
+                }
+            }
+            $this->twigFilters[] = $filter;
+        }
     }
 
     /**
@@ -281,7 +288,14 @@ abstract class BaseBuilder implements BuilderInterface
      */
     public function addTwigExtensions(array $extensions)
     {
-        $this->twigExtensions = array_unique(array_merge($this->twigExtensions, $extensions));
+        foreach($extensions as $extension) {
+            if (is_string($extension)) {
+                if (in_array($extension, $this->twigExtensions)) {
+                    continue;
+                }
+            }
+            $this->twigExtensions[] = $extension;
+        }
     }
 
     /**
@@ -309,7 +323,10 @@ abstract class BaseBuilder implements BuilderInterface
     protected function loadTwigFilters(\Twig_Environment $twig)
     {
         foreach ($this->twigFilters as $twigFilter) {
-            if (($pos = strpos($twigFilter, ':')) !== false) {
+            if (is_object($twigFilter)) {
+                $twig->addFilter(get_class($twigFilter), $twigFilter);
+                continue;
+            } elseif (($pos = strpos($twigFilter, ':')) !== false) {
                 $twigFilterName = substr($twigFilter, $pos + 2);
             } else {
                 $twigFilterName = $twigFilter;
@@ -321,7 +338,11 @@ abstract class BaseBuilder implements BuilderInterface
     protected function loadTwigExtensions(\Twig_Environment $twig)
     {
         foreach ($this->twigExtensions as $twigExtensionName) {
-            $twigExtension = new $twigExtensionName();
+            if (is_object($twigExtensionName)) {
+                $twigExtension = $twigExtensionName;
+            } else {
+                $twigExtension = new $twigExtensionName();
+            }
             $twig->addExtension($twigExtension);
         }
     }
