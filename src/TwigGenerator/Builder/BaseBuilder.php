@@ -306,7 +306,7 @@ abstract class BaseBuilder implements BuilderInterface
         return $twig;
     }
 
-    private function loadTwigFilters(\Twig_Environment $twig)
+    protected function loadTwigFilters(\Twig_Environment $twig)
     {
         foreach ($this->twigFilters as $twigFilter) {
             if (($pos = strpos($twigFilter, ':')) !== false) {
@@ -318,7 +318,7 @@ abstract class BaseBuilder implements BuilderInterface
         }
     }
 
-    private function loadTwigExtensions(\Twig_Environment $twig)
+    protected function loadTwigExtensions(\Twig_Environment $twig)
     {
         foreach ($this->twigExtensions as $twigExtensionName) {
             $twigExtension = new $twigExtensionName();
