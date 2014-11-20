@@ -83,6 +83,6 @@ class PHPPrintExtension extends \Twig_Extension
      */
     public function getName()
     {
-        return 'php_print';
+        return 'twig_generator_php_print';
     }
 }

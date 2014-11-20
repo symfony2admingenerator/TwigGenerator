@@ -25,6 +25,16 @@ class Generator
     protected $tempDir;
 
     /**
+     * @var array List of Twig Extensions to load for parsing
+     */
+    protected $twigExtensions = array();
+
+    /**
+     * @var array List of Twig Filters to load for parsing
+     */
+    protected $twigFilters = array();
+
+    /**
      * @var array   List of builders.
      */
     protected $builders = array();
@@ -109,6 +119,28 @@ class Generator
     }
 
     /**
+     * Set Twig extensions to load before parsing
+     * templates.
+     *
+     * @param array $twigExtensions
+     */
+    public function setTwigExtensions(array $twigExtensions)
+    {
+        $this->twigExtensions = $twigExtensions;
+    }
+
+    /**
+     * Set Twig filters to load before parsing
+     * templates.
+     *
+     * @param array $twigFilters
+     */
+    public function setTwigFilters(array $twigFilters)
+    {
+        $this->twigFilters = $twigFilters;
+    }
+
+    /**
      * @return array    The list of builders.
      */
     public function getBuilders()
@@ -126,6 +158,8 @@ class Generator
     public function addBuilder(BuilderInterface $builder)
     {
         $builder->setGenerator($this);
+        $builder->addTwigExtensions($this->twigExtensions);
+        $builder->addTwigFilters($this->twigFilters);
         $builder->setTemplateDirs($this->templateDirectories);
         $builder->setMustOverwriteIfExists($this->mustOverwriteIfExists);
         $builder->setVariables(array_merge($this->variables, $builder->getVariables()));   

@@ -171,17 +171,18 @@ interface BuilderInterface
     function getCode();
 
     /**
-     * Add Twig filters from a given Twig environment.
+     * Add Twig filters to load for parsing and generating
+     * templates.
      *
-     * @param \Twig_Environment $twig   A Twig environment.
+     * @param array $filters Filters to add
      */
-    function addTwigFilters(\Twig_Environment $twig);
+    function addTwigFilters(array $filters);
 
     /**
-     * Add Twig extensions.
+     * Add Twig extensions to load for parsing and generating
+     * templates.
      *
-     * @param \Twig_Environment $twig       A Twig environment.
-     * @param \Twig_LoaderInterface $loader A Twig loader.
+     * @param array $extensions Extensions to add
      */
-    function addTwigExtensions(\Twig_Environment $twig, \Twig_LoaderInterface $loader);
+    function addTwigExtensions(array $extensions);
 }

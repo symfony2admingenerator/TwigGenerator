@@ -422,6 +422,6 @@ class TwigPrintExtension extends \Twig_Extension
      */
     public function getName()
     {
-        return 'twig_print';
+        return 'twig_generator_twig_print';
     }
 }

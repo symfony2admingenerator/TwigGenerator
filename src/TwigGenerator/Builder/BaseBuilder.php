@@ -65,6 +65,8 @@ abstract class BaseBuilder implements BuilderInterface
      * @var array
      */
     protected $twigExtensions = array(
+        '\\TwigGenerator\\Extension\\PHPPrintExtension',
+        '\\TwigGenerator\\Extension\\TwigPrintExtension',
     );
 
     /**
@@ -257,16 +259,7 @@ abstract class BaseBuilder implements BuilderInterface
      */
     public function getCode()
     {
-        $loader = new \Twig_Loader_Filesystem($this->getTemplateDirs());
-        $twig = new \Twig_Environment($loader, array(
-            'autoescape' => false,
-            'strict_variables' => true,
-            'debug' => true,
-            'cache' => $this->getGenerator()->getTempDir(),
-        ));
-
-        $this->addTwigExtensions($twig, $loader);
-        $this->addTwigFilters($twig);
+        $twig = $this->getTwigEnvironment();
         $template = $twig->loadTemplate($this->getTemplateName());
 
         $variables = $this->getVariables();
@@ -278,7 +271,42 @@ abstract class BaseBuilder implements BuilderInterface
     /**
      * {@inheritDoc}
      */
-    public function addTwigFilters(\Twig_Environment $twig)
+    public function addTwigFilters(array $filters)
+    {
+        $this->twigFilters = array_unique(array_merge($this->twigFilters, $filters));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addTwigExtensions(array $extensions)
+    {
+        $this->twigExtensions = array_unique(array_merge($this->twigExtensions, $extensions));
+    }
+
+    /**
+     * Initialize the Twig Environment which automatically loads
+     * extensions and filters.
+     *
+     * @return \Twig_Environment
+     */
+    protected function getTwigEnvironment()
+    {
+        $loader = new \Twig_Loader_Filesystem($this->getTemplateDirs());
+        $twig = new \Twig_Environment($loader, array(
+            'autoescape' => false,
+            'strict_variables' => true,
+            'debug' => true,
+            'cache' => $this->getGenerator()->getTempDir(),
+        ));
+
+        $this->loadTwigExtensions($twig);
+        $this->loadTwigFilters($twig);
+
+        return $twig;
+    }
+
+    private function loadTwigFilters(\Twig_Environment $twig)
     {
         foreach ($this->twigFilters as $twigFilter) {
             if (($pos = strpos($twigFilter, ':')) !== false) {
@@ -290,13 +318,10 @@ abstract class BaseBuilder implements BuilderInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function addTwigExtensions(\Twig_Environment $twig, \Twig_LoaderInterface $loader)
+    private function loadTwigExtensions(\Twig_Environment $twig)
     {
         foreach ($this->twigExtensions as $twigExtensionName) {
-            $twigExtension = new $twigExtensionName($loader);
+            $twigExtension = new $twigExtensionName();
             $twig->addExtension($twigExtension);
         }
     }
