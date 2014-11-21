@@ -343,7 +343,9 @@ abstract class BaseBuilder implements BuilderInterface
             } else {
                 $twigExtension = new $twigExtensionName();
             }
-            $twig->addExtension($twigExtension);
+            if (!$twig->hasExtension($twigExtension->getName())) {
+                $twig->addExtension($twigExtension);
+            }
         }
     }
 }
