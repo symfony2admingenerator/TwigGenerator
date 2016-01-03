@@ -15,8 +15,8 @@ class PHPPrintExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            'as_php'   => new \Twig_SimpleFilter($this, 'asPhp'),
-            'php_name' => new \Twig_SimpleFilter($this, 'phpName'),
+            'as_php'   => new \Twig_SimpleFilter('as_php'  , array($this, 'asPhp')),
+            'php_name' => new \Twig_SimpleFilter('php_name', array($this, 'phpName')),
         );
     }
 
