@@ -331,7 +331,7 @@ abstract class BaseBuilder implements BuilderInterface
             } else {
                 $twigFilterName = $twigFilter;
             }
-            $twig->addFilter($twigFilterName, new \Twig_SimpleFilter($twigFilterName, $twigFilter));
+            $twig->addFilter(new \Twig_SimpleFilter($twigFilterName, $twigFilter));
         }
     }
 
