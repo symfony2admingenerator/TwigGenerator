@@ -98,6 +98,7 @@ class BaseBuilderTest extends \PHPUnit_Framework_TestCase
         $generator = $this->getMockBuilder('TwigGenerator\Builder\Generator')
                           ->disableOriginalConstructor()
                           ->getMock();
+        $generator->method('getTempDir')->willReturn('/tmp');
 
         $builder->setGenerator($generator);
         $builder->setMustOverwriteIfExists(true);
