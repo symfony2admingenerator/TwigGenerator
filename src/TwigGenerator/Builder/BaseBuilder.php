@@ -324,7 +324,14 @@ abstract class BaseBuilder implements BuilderInterface
     {
         foreach ($this->twigFilters as $twigFilter) {
             if (is_object($twigFilter)) {
-                $twig->addFilter($twigFilter);
+                if (method_exists($twigFilter, 'getName')) {
+                    $twig->addFilter($twigFilter);
+                } else {
+                    $filter = new \ReflectionObject($twigFilter);
+                    $name = $filter->getProperty('method');
+                    $name->setAccessible(true);
+                    $twig->addFilter($name->getValue($twigFilter), $twigFilter);
+                }
                 continue;
             } elseif (($pos = strpos($twigFilter, ':')) !== false) {
                 $twigFilterName = substr($twigFilter, $pos + 2);
