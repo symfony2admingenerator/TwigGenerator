@@ -2,12 +2,15 @@
 
 namespace TwigGenerator\Extension;
 
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+
 /**
  * @author Cedric LOMBARDOT
  * @author Piotr Gołębiewski <loostro@gmail.com>
  * @author Stéphane Escandell
  */
-class PHPPrintExtension extends \Twig_Extension
+class PHPPrintExtension extends AbstractExtension
 {
     /**
      * {@inheritdoc}
@@ -15,8 +18,8 @@ class PHPPrintExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            'as_php'   => new \Twig_SimpleFilter('as_php'  , array($this, 'asPhp')),
-            'php_name' => new \Twig_SimpleFilter('php_name', array($this, 'phpName')),
+            'as_php'   => new TwigFilter('as_php'  , array($this, 'asPhp')),
+            'php_name' => new TwigFilter('php_name', array($this, 'phpName')),
         );
     }
 

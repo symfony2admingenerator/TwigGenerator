@@ -2,12 +2,15 @@
 
 namespace TwigGenerator\Extension;
 
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
+
 /**
  * @author Cedric LOMBARDOT
  * @author Piotr Gołębiewski <loostro@gmail.com>
  * @author Stéphane Escandell
  */
-class TwigPrintExtension extends \Twig_Extension
+class TwigPrintExtension extends AbstractExtension
 {
     /**
      * @var array
@@ -20,28 +23,28 @@ class TwigPrintExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'echo_twig'           => new \Twig_SimpleFunction('echo_twig'        , array($this, 'getEchoTwig')),
-            'echo_block'          => new \Twig_SimpleFunction('echo_block'       , array($this, 'getEchoBlock')),
-            'echo_endblock'       => new \Twig_SimpleFunction('echo_endblock'    , array($this, 'getEchoEndBlock')),
-            'echo_for'            => new \Twig_SimpleFunction('echo_for'         , array($this, 'getEchoFor')),
-            'echo_endfor'         => new \Twig_SimpleFunction('echo_endfor'      , array($this, 'getEchoEndFor')),
-            'echo_raw'            => new \Twig_SimpleFunction('echo_raw'         , array($this, 'getEchoRaw')),
-            'echo_endraw'         => new \Twig_SimpleFunction('echo_endraw'      , array($this, 'getEchoEndRaw')),
-            'echo_spaceless'      => new \Twig_SimpleFunction('echo_spaceless'   , array($this, 'getEchoSpaceless')),
-            'echo_endspaceless'   => new \Twig_SimpleFunction('echo_endspaceless', array($this, 'getEchoEndSpaceless')),
-            'echo_extends'        => new \Twig_SimpleFunction('echo_extends'     , array($this, 'getEchoExtends')),
-            'echo_if'             => new \Twig_SimpleFunction('echo_if'          , array($this, 'getEchoIf')),
-            'echo_else'           => new \Twig_SimpleFunction('echo_else'        , array($this, 'getEchoElse')),
-            'echo_elseif'         => new \Twig_SimpleFunction('echo_elseif'      , array($this, 'getEchoElseIf')),
-            'echo_endif'          => new \Twig_SimpleFunction('echo_endif'       , array($this, 'getEchoEndIf')),
-            'echo_set'            => new \Twig_SimpleFunction('echo_set'         , array($this, 'getEchoSet')),
-            'echo_twig_arr'       => new \Twig_SimpleFunction('echo_twig_arr'    , array($this, 'getEchoTwigArr')),
-            'echo_twig_assoc'     => new \Twig_SimpleFunction('echo_twig_assoc'  , array($this, 'getEchoTwigAssoc')),
-            'echo_twig_filter'    => new \Twig_SimpleFunction('echo_twig_filter' , array($this, 'getEchoTwigFilter')),
-            'echo_include'        => new \Twig_SimpleFunction('echo_include'     , array($this, 'getEchoInclude')),
-            'echo_use'            => new \Twig_SimpleFunction('echo_use'         , array($this, 'getEchoUse')),
-            'echo_print_block'    => new \Twig_SimpleFunction('echo_print_block' , array($this, 'getEchoPrintBlock')),
-            'char'                => new \Twig_SimpleFunction('char'             , array($this, 'char')),
+            'echo_twig'           => new TwigFunction('echo_twig'        , array($this, 'getEchoTwig')),
+            'echo_block'          => new TwigFunction('echo_block'       , array($this, 'getEchoBlock')),
+            'echo_endblock'       => new TwigFunction('echo_endblock'    , array($this, 'getEchoEndBlock')),
+            'echo_for'            => new TwigFunction('echo_for'         , array($this, 'getEchoFor')),
+            'echo_endfor'         => new TwigFunction('echo_endfor'      , array($this, 'getEchoEndFor')),
+            'echo_raw'            => new TwigFunction('echo_raw'         , array($this, 'getEchoRaw')),
+            'echo_endraw'         => new TwigFunction('echo_endraw'      , array($this, 'getEchoEndRaw')),
+            'echo_spaceless'      => new TwigFunction('echo_spaceless'   , array($this, 'getEchoSpaceless')),
+            'echo_endspaceless'   => new TwigFunction('echo_endspaceless', array($this, 'getEchoEndSpaceless')),
+            'echo_extends'        => new TwigFunction('echo_extends'     , array($this, 'getEchoExtends')),
+            'echo_if'             => new TwigFunction('echo_if'          , array($this, 'getEchoIf')),
+            'echo_else'           => new TwigFunction('echo_else'        , array($this, 'getEchoElse')),
+            'echo_elseif'         => new TwigFunction('echo_elseif'      , array($this, 'getEchoElseIf')),
+            'echo_endif'          => new TwigFunction('echo_endif'       , array($this, 'getEchoEndIf')),
+            'echo_set'            => new TwigFunction('echo_set'         , array($this, 'getEchoSet')),
+            'echo_twig_arr'       => new TwigFunction('echo_twig_arr'    , array($this, 'getEchoTwigArr')),
+            'echo_twig_assoc'     => new TwigFunction('echo_twig_assoc'  , array($this, 'getEchoTwigAssoc')),
+            'echo_twig_filter'    => new TwigFunction('echo_twig_filter' , array($this, 'getEchoTwigFilter')),
+            'echo_include'        => new TwigFunction('echo_include'     , array($this, 'getEchoInclude')),
+            'echo_use'            => new TwigFunction('echo_use'         , array($this, 'getEchoUse')),
+            'echo_print_block'    => new TwigFunction('echo_print_block' , array($this, 'getEchoPrintBlock')),
+            'char'                => new TwigFunction('char'             , array($this, 'char')),
         );
     }
 
@@ -289,7 +292,7 @@ class TwigPrintExtension extends \Twig_Extension
      */
     public function getEchoSpaceless()
     {
-        return '{% spaceless %}';
+        return '{% apply spaceless %}';
     }
 
     /**
@@ -299,7 +302,7 @@ class TwigPrintExtension extends \Twig_Extension
      */
     public function getEchoEndSpaceless()
     {
-        return '{% endspaceless %}';
+        return '{% endapply %}';
     }
 
     /**
