@@ -17,9 +17,10 @@ class PHPPrintExtension extends AbstractExtension
      */
     public function getFilters()
     {
+        $options = ['is_safe' => ['html']];
         return array(
-            'as_php'   => new TwigFilter('as_php'  , array($this, 'asPhp')),
-            'php_name' => new TwigFilter('php_name', array($this, 'phpName')),
+            'as_php'   => new TwigFilter('as_php'  , array($this, 'asPhp'), $options),
+            'php_name' => new TwigFilter('php_name', array($this, 'phpName'), $options),
         );
     }
 

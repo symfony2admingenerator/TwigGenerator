@@ -49,11 +49,6 @@ abstract class BaseBuilder implements BuilderInterface
      * @var array
      */
     protected $twigFilters = array(
-        'addslashes',
-        'var_export',
-        'is_numeric',
-        'ucfirst',
-        'substr',
     );
 
     /**
@@ -67,6 +62,7 @@ abstract class BaseBuilder implements BuilderInterface
     protected $twigExtensions = array(
         '\\TwigGenerator\\Extension\\PHPPrintExtension',
         '\\TwigGenerator\\Extension\\TwigPrintExtension',
+        '\\TwigGenerator\\Extension\\ExtraFilterExtension',
     );
 
     /**
