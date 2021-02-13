@@ -10,6 +10,10 @@
 
 namespace TwigGenerator\Builder;
 
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
+use Twig\TwigFilter;
+
 /**
  * @author Cédric Lombardot
  */
@@ -298,12 +302,12 @@ abstract class BaseBuilder implements BuilderInterface
      * Initialize the Twig Environment which automatically loads
      * extensions and filters.
      *
-     * @return \Twig_Environment
+     * @return Environment
      */
     protected function getTwigEnvironment()
     {
-        $loader = new \Twig_Loader_Filesystem($this->getTemplateDirs());
-        $twig = new \Twig_Environment($loader, array(
+        $loader = new FilesystemLoader($this->getTemplateDirs());
+        $twig = new Environment($loader, array(
             'autoescape' => false,
             'strict_variables' => true,
             'debug' => true,
@@ -316,7 +320,7 @@ abstract class BaseBuilder implements BuilderInterface
         return $twig;
     }
 
-    protected function loadTwigFilters(\Twig_Environment $twig)
+    protected function loadTwigFilters(Environment $twig)
     {
         foreach ($this->twigFilters as $twigFilter) {
             if (is_object($twigFilter)) {
@@ -327,11 +331,11 @@ abstract class BaseBuilder implements BuilderInterface
             } else {
                 $twigFilterName = $twigFilter;
             }
-            $twig->addFilter(new \Twig_SimpleFilter($twigFilterName, $twigFilter));
+            $twig->addFilter(new TwigFilter($twigFilterName, $twigFilter));
         }
     }
 
-    protected function loadTwigExtensions(\Twig_Environment $twig)
+    protected function loadTwigExtensions(Environment $twig)
     {
         foreach ($this->twigExtensions as $twigExtensionName) {
             if (is_object($twigExtensionName)) {

@@ -1,6 +1,10 @@
 <?php
 namespace TwigGenerator\Tests\Extension;
 
+use Twig\Environment;
+use Twig\Extension\AbstractExtension;
+use Twig\Loader\ArrayLoader;
+
 /**
  *
  * Base class to test extensions. Provide builtin functions to initialize
@@ -20,12 +24,12 @@ abstract class BaseExtensionTest extends \PHPUnit_Framework_TestCase
     protected $twigVariables = array();
 
     /**
-     * @var \Twig_Extension
+     * @var AbstractExtension
      */
     protected $extension;
 
     /**
-     * @return \Twig_Extension
+     * @return AbstractExtension
      */
     abstract protected function getTestedExtension();
 
@@ -63,8 +67,8 @@ abstract class BaseExtensionTest extends \PHPUnit_Framework_TestCase
 
     protected function getEnvironment($templates, $options = array())
     {
-        $twig = new \Twig_Environment(
-            new \Twig_Loader_Array($templates),
+        $twig = new Environment(
+            new ArrayLoader($templates),
             array_merge(
                 array(
                     'debug' => true,
