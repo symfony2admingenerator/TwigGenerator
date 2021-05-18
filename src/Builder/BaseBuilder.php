@@ -260,7 +260,7 @@ abstract class BaseBuilder implements BuilderInterface
     public function getCode()
     {
         $twig = $this->getTwigEnvironment();
-        $template = $twig->loadTemplate($this->getTemplateName());
+        $template = $twig->load($this->getTemplateName());
 
         $variables = $this->getVariables();
         $variables['builder'] = $this;
