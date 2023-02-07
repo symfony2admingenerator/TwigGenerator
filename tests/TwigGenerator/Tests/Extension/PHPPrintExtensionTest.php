@@ -8,31 +8,25 @@ use TwigGenerator\Extension\PHPPrintExtension;
  */
 class PHPPrintExtensionTest extends BaseExtensionTest
 {
-    /**
-     * @return array
-     */
-    protected function getTwigVariables()
+    protected function getTwigVariables(): array
     {
-        return array();
+        return [];
     }
 
-    /**
-     * @return PHPPrintExtension
-     */
-    protected function getTestedExtension()
+    protected function getTestedExtension(): PHPPrintExtension
     {
         return new PHPPrintExtension();
     }
 
-    public function testPhpName()
+    public function testPhpName(): void
     {
-        $tpls = array(
+        $tpls = [
             'string' => '{{ "cedric-is-valid"|php_name }}',
-        );
+        ];
 
-        $returns = array(
-            'string' => array("cedricisvalid", 'Php name format well the string'),
-        );
+        $returns = [
+            'string' => ["cedricisvalid", 'Php name format well the string'],
+        ];
 
         $this->runTwigTests($tpls, $returns);
     }

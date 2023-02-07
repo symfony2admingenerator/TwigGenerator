@@ -18,33 +18,22 @@ abstract class BaseExtensionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Variables used for templates
-     *
-     * @var array
      */
-    protected $twigVariables = array();
+    protected array $twigVariables = [];
 
-    /**
-     * @var AbstractExtension
-     */
-    protected $extension;
+    protected AbstractExtension $extension;
 
-    /**
-     * @return AbstractExtension
-     */
-    abstract protected function getTestedExtension();
+    abstract protected function getTestedExtension(): AbstractExtension;
 
-    /**
-     * @return array
-     */
-    abstract protected function getTwigVariables();
+    abstract protected function getTwigVariables(): array;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->twigVariables = $this->getTwigVariables();
         $this->extension = $this->getTestedExtension();
     }
 
-    protected function runTwigTests(array $templates, array $returns)
+    protected function runTwigTests(array $templates, array $returns): void
     {
         if (array_diff(array_keys($templates), array_keys($returns))) {
             throw new \LogicException(sprintf(
@@ -65,16 +54,16 @@ abstract class BaseExtensionTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    protected function getEnvironment($templates, $options = array())
+    protected function getEnvironment($templates, $options = []): Environment
     {
         $twig = new Environment(
             new ArrayLoader($templates),
             array_merge(
-                array(
+                [
                     'debug' => true,
                     'cache' => false,
                     'autoescape' => false,
-                ),
+                ],
                 $options
             )
         );

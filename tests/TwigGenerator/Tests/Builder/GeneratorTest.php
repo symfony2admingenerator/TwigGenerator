@@ -7,23 +7,23 @@ use TwigGenerator\Builder\Generator;
 
 class GeneratorTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAddBuilder()
+    public function testAddBuilder(): void
     {
         $builder = new DemoBuilder();
-        $builder->setVariables(array('foo' => 'bar'));
+        $builder->setVariables(['foo' => 'bar']);
         
         $generator = new Generator();
-        $generator->setVariables(array('foo' => 'common bar', 'baz' => 'common baz' ));
+        $generator->setVariables(['foo' => 'common bar', 'baz' => 'common baz']);
         $generator->addBuilder($builder);
 
         $this->assertEquals('bar', $builder->getVariable('foo'), 'Builder variable is more important than common builder variable');
         $this->assertEquals('common baz', $builder->getVariable('baz'), 'Expected common builder variable');
     }
 
-    public function testAddBuilderOnlyBuilderVariables()
+    public function testAddBuilderOnlyBuilderVariables(): void
     {
         $builder = new DemoBuilder();
-        $builder->setVariables(array('foo' => 'bar'));
+        $builder->setVariables(['foo' => 'bar']);
         
         $generator = new Generator();        
         $generator->addBuilder($builder);
@@ -31,13 +31,13 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $builder->getVariable('foo'), 'Expected builder variable');
     }
 
-    public function testAddBuilderOnlyGeneratorCommonVariables()
+    public function testAddBuilderOnlyGeneratorCommonVariables(): void
     {
         $builder1 = new DemoBuilder();        
         $builder2 = new DemoBuilder();        
         
         $generator = new Generator();        
-        $generator->setVariables(array('foo' => 'common foo'));
+        $generator->setVariables(['foo' => 'common foo']);
         $generator->addBuilder($builder1);
         $generator->addBuilder($builder2);
 
@@ -45,13 +45,13 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('common foo', $builder2->getVariable('foo'), 'Expected common builder variable');
     }
 
-    public function testCallAddBuilderBeforeSetVariables()
+    public function testCallAddBuilderBeforeSetVariables(): void
     {
         $builder = new DemoBuilder();
 
         $generator = new Generator();        
         $generator->addBuilder($builder);
-        $generator->setVariables(array('foo' => 'bar'));
+        $generator->setVariables(['foo' => 'bar']);
         
         $this->assertNull($builder->getVariable('foo'), ' If addBuilder is called before setVariables then common builder variables will be skipped');
     }    

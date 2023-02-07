@@ -15,56 +15,33 @@ namespace TwigGenerator\Builder;
  */
 class Generator
 {
-    /**
-     */
-    const TEMP_DIR_PREFIX = 'TwigGenerator';
+    final protected const TEMP_DIR_PREFIX = 'TwigGenerator';
+
+    protected string $tempDir;
+
+    protected array $twigExtensions = [];
+
+    protected array $twigFilters = [];
+
+    protected array $builders = [];
+
+    protected bool $mustOverwriteIfExists = false;
 
     /**
-     * @var string  The temporary dir.
+     * @var string[]
      */
-    protected $tempDir;
+    protected array $templateDirectories = [];
 
-    /**
-     * @var array List of Twig Extensions to load for parsing
-     */
-    protected $twigExtensions = array();
+    protected array $variables = [];
 
-    /**
-     * @var array List of Twig Filters to load for parsing
-     */
-    protected $twigFilters = array();
-
-    /**
-     * @var array   List of builders.
-     */
-    protected $builders = array();
-
-    /**
-     * @var Boolean
-     */
-    protected $mustOverwriteIfExists = false;
-
-    /**
-     * @var array
-     */
-    protected $templateDirectories = array();
-
-    /**
-     * @var array   Variables to pass to the builder.
-     */
-    protected $variables = array();
-
-    /**
-     * @var boolean Activate remove temp dir after generation
-     */
-    protected $autoRemoveTempDir = true;
+    protected bool $autoRemoveTempDir = true;
 
     /**
      * Init a new generator and automatically define the base of temp directory.
-     * 
-     * @param string $baseTempDir    Existing base directory for temporary template files
+     *
+     * @param string|null $baseTempDir Existing base directory for temporary template files
      */
-    public function __construct($baseTempDir = null)
+    public function __construct(string $baseTempDir = null)
     {
         if (null === $baseTempDir) {
             $baseTempDir = sys_get_temp_dir();
@@ -77,17 +54,17 @@ class Generator
         }
     }
 
-    public function setAutoRemoveTempDir($autoRemoveTempDir = true)
+    public function setAutoRemoveTempDir($autoRemoveTempDir = true): void
     {
         $this->autoRemoveTempDir = $autoRemoveTempDir;
     }
 
-    public function setMustOverwriteIfExists($status = true)
+    public function setMustOverwriteIfExists($status = true): void
     {
         $this->mustOverwriteIfExists = $status;
     }
 
-    public function setTemplateDirs(array $templateDirs)
+    public function setTemplateDirs(array $templateDirs): void
     {
         $this->templateDirectories = $templateDirs;
     }
@@ -102,18 +79,12 @@ class Generator
         }
     }
 
-    /**
-     * @param string The temporary directory path
-     */
-    public function setTempDir($tempDir)
+    public function setTempDir(string $tempDir): void
     {
         $this->tempDir = $tempDir;
     }
 
-    /**
-     * @return string   The temporary directory.
-     */
-    public function getTempDir()
+    public function getTempDir(): string
     {
         return $this->tempDir;
     }
@@ -121,10 +92,8 @@ class Generator
     /**
      * Set Twig extensions to load before parsing
      * templates.
-     *
-     * @param array $twigExtensions
      */
-    public function setTwigExtensions(array $twigExtensions)
+    public function setTwigExtensions(array $twigExtensions): void
     {
         $this->twigExtensions = $twigExtensions;
     }
@@ -132,30 +101,18 @@ class Generator
     /**
      * Set Twig filters to load before parsing
      * templates.
-     *
-     * @param array $twigFilters
      */
-    public function setTwigFilters(array $twigFilters)
+    public function setTwigFilters(array $twigFilters): void
     {
         $this->twigFilters = $twigFilters;
     }
 
-    /**
-     * @return array    The list of builders.
-     */
-    public function getBuilders()
+    public function getBuilders(): array
     {
         return $this->builders;
     }
 
-    /**
-     * Add a builder.
-     *
-     * @param \TwigGenerator\Builder\BuilderInterface $builder  A builder.
-     *
-     * @return \TwigGenerator\Builder\BuilderInterface  The builder
-     */
-    public function addBuilder(BuilderInterface $builder)
+    public function addBuilder(BuilderInterface $builder): BuilderInterface
     {
         $builder->setGenerator($this);
         $builder->addTwigExtensions($this->twigExtensions);
@@ -169,34 +126,19 @@ class Generator
         return $builder;
     }
 
-    /**
-     * Add an array of variables to pass to builders.
-     *
-     * @param array $variables  A set of variables.
-     */
-    public function setVariables(array $variables = array())
+    public function setVariables(array $variables = []): void
     {
         $this->variables = $variables;
     }
 
-    /**
-     * Generate and write classes to disk.
-     *
-     * @param string $outputDirectory   An output directory.
-     */
-    public function writeOnDisk($outputDirectory)
+    public function writeOnDisk(string $outputDirectory): void
     {
         foreach ($this->getBuilders() as $builder) {
             $builder->writeOnDisk($outputDirectory);
         }
     }
 
-    /**
-     * Remove a directory.
-     *
-     * @param string $target    A directory.
-     */
-    private function removeDir($target)
+    private function removeDir(string $target): void
     {
         $fp = opendir($target);
         while (false !== $file = readdir($fp)) {

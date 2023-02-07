@@ -13,59 +13,51 @@ use Twig\TwigFunction;
 class TwigPrintExtension extends AbstractExtension
 {
     /**
-     * @var array
+     * @var string[]
      */
-    protected $blockNames = array();
+    protected array $blockNames = [];
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         $options = ['is_safe' => ['html']];
-        return array(
-            'echo_twig'           => new TwigFunction('echo_twig'        , array($this, 'getEchoTwig'), $options),
-            'echo_block'          => new TwigFunction('echo_block'       , array($this, 'getEchoBlock'), $options),
-            'echo_endblock'       => new TwigFunction('echo_endblock'    , array($this, 'getEchoEndBlock'), $options),
-            'echo_for'            => new TwigFunction('echo_for'         , array($this, 'getEchoFor'), $options),
-            'echo_endfor'         => new TwigFunction('echo_endfor'      , array($this, 'getEchoEndFor'), $options),
-            'echo_raw'            => new TwigFunction('echo_raw'         , array($this, 'getEchoRaw'), $options),
-            'echo_endraw'         => new TwigFunction('echo_endraw'      , array($this, 'getEchoEndRaw'), $options),
-            'echo_spaceless'      => new TwigFunction('echo_spaceless'   , array($this, 'getEchoSpaceless'), $options),
-            'echo_endspaceless'   => new TwigFunction('echo_endspaceless', array($this, 'getEchoEndSpaceless'), $options),
-            'echo_extends'        => new TwigFunction('echo_extends'     , array($this, 'getEchoExtends'), $options),
-            'echo_if'             => new TwigFunction('echo_if'          , array($this, 'getEchoIf'), $options),
-            'echo_else'           => new TwigFunction('echo_else'        , array($this, 'getEchoElse'), $options),
-            'echo_elseif'         => new TwigFunction('echo_elseif'      , array($this, 'getEchoElseIf'), $options),
-            'echo_endif'          => new TwigFunction('echo_endif'       , array($this, 'getEchoEndIf'), $options),
-            'echo_set'            => new TwigFunction('echo_set'         , array($this, 'getEchoSet'), $options),
-            'echo_twig_arr'       => new TwigFunction('echo_twig_arr'    , array($this, 'getEchoTwigArr'), $options),
-            'echo_twig_assoc'     => new TwigFunction('echo_twig_assoc'  , array($this, 'getEchoTwigAssoc'), $options),
-            'echo_twig_filter'    => new TwigFunction('echo_twig_filter' , array($this, 'getEchoTwigFilter'), $options),
-            'echo_include'        => new TwigFunction('echo_include'     , array($this, 'getEchoInclude'), $options),
-            'echo_use'            => new TwigFunction('echo_use'         , array($this, 'getEchoUse'), $options),
-            'echo_print_block'    => new TwigFunction('echo_print_block' , array($this, 'getEchoPrintBlock'), $options),
-            'char'                => new TwigFunction('char'             , array($this, 'char'), $options),
-        );
+        return [
+            'echo_twig'           => new TwigFunction('echo_twig'        , $this->getEchoTwig(...), $options),
+            'echo_block'          => new TwigFunction('echo_block'       , $this->getEchoBlock(...), $options),
+            'echo_endblock'       => new TwigFunction('echo_endblock'    , $this->getEchoEndBlock(...), $options),
+            'echo_for'            => new TwigFunction('echo_for'         , $this->getEchoFor(...), $options),
+            'echo_endfor'         => new TwigFunction('echo_endfor'      , $this->getEchoEndFor(...), $options),
+            'echo_raw'            => new TwigFunction('echo_raw'         , $this->getEchoRaw(...), $options),
+            'echo_endraw'         => new TwigFunction('echo_endraw'      , $this->getEchoEndRaw(...), $options),
+            'echo_spaceless'      => new TwigFunction('echo_spaceless'   , $this->getEchoSpaceless(...), $options),
+            'echo_endspaceless'   => new TwigFunction('echo_endspaceless', $this->getEchoEndSpaceless(...), $options),
+            'echo_extends'        => new TwigFunction('echo_extends'     , $this->getEchoExtends(...), $options),
+            'echo_if'             => new TwigFunction('echo_if'          , $this->getEchoIf(...), $options),
+            'echo_else'           => new TwigFunction('echo_else'        , $this->getEchoElse(...), $options),
+            'echo_elseif'         => new TwigFunction('echo_elseif'      , $this->getEchoElseIf(...), $options),
+            'echo_endif'          => new TwigFunction('echo_endif'       , $this->getEchoEndIf(...), $options),
+            'echo_set'            => new TwigFunction('echo_set'         , $this->getEchoSet(...), $options),
+            'echo_twig_arr'       => new TwigFunction('echo_twig_arr'    , $this->getEchoTwigArr(...), $options),
+            'echo_twig_assoc'     => new TwigFunction('echo_twig_assoc'  , $this->getEchoTwigAssoc(...), $options),
+            'echo_twig_filter'    => new TwigFunction('echo_twig_filter' , $this->getEchoTwigFilter(...), $options),
+            'echo_include'        => new TwigFunction('echo_include'     , $this->getEchoInclude(...), $options),
+            'echo_use'            => new TwigFunction('echo_use'         , $this->getEchoUse(...), $options),
+            'echo_print_block'    => new TwigFunction('echo_print_block' , $this->getEchoPrintBlock(...), $options),
+            'char'                => new TwigFunction('char'             , $this->char(...), $options),
+        ];
     }
 
     /**
-     * Get characters by code
+     * Get characters by code.
      *
      * Note: if the code is higher than 256, it will return the code mod 256.
      * For example: chr(321)=A because A=65(256)
-     *
-     * @param integer Any number of integer codes
-     * @return string
      */
-    public function char()
+    public function char(int ...$chars): string
     {
         $str = '';
 
-        foreach (func_get_args() as $char) {
-            if (is_int($char)) {
-                $str .= chr($char);
-            }
+        foreach ($chars as $char) {
+            $str .= chr($char);
         }
 
         return $str;
@@ -80,29 +72,18 @@ class TwigPrintExtension extends AbstractExtension
      *      => {% set my_var = "myvalue" %}
      * {{ echo_set('my_var', 'myObjectValue', false) }}
      *      => {% set my_var = myObjectValue %}
-     *
-     *
-     * @param $var
-     * @param $value
-     * @param bool $value_as_string
-     * @return string
      */
-    public function getEchoSet($var, $value, $value_as_string = true)
+    public function getEchoSet(string $var, string $value, bool $value_as_string = true): string
     {
         if ($value_as_string) {
-            return strtr('{% set %%var%% = "%%value%%" %}', array('%%var%%' => $var, '%%value%%' => $value));
+            return strtr('{% set %%var%% = "%%value%%" %}', ['%%var%%' => $var, '%%value%%' => $value]);
         } else {
-            return strtr('{% set %%var%% = %%value%% %}', array('%%var%%' => $var, '%%value%%' => $value));
+            return strtr('{% set %%var%% = %%value%% %}', ['%%var%%' => $var, '%%value%%' => $value]);
         }
     }
 
-    /**
-     * Print "if" tag with $condition as condition
-     *
-     * @param $condition
-     * @return string
-     */
-    public function getEchoIf($condition)
+    /** Print "if" tag with $condition as condition. */
+    public function getEchoIf(mixed $condition): string
     {
         if (is_bool($condition)) {
             $condition = intval($condition);
@@ -111,13 +92,8 @@ class TwigPrintExtension extends AbstractExtension
         return str_replace('%%condition%%', $condition, '{% if %%condition%% %}');
     }
 
-    /**
-     * Print "elseif" tag with $condition as condition
-     *
-     * @param $condition
-     * @return string
-     */
-    public function getEchoElseIf($condition)
+    /** Print "elseif" tag with $condition as condition. */
+    public function getEchoElseIf(mixed $condition): string
     {
         if (is_bool($condition)) {
             $condition = intval($condition);
@@ -126,33 +102,20 @@ class TwigPrintExtension extends AbstractExtension
         return str_replace('%%condition%%', $condition, '{% elseif %%condition%% %}');
     }
 
-    /**
-     * Print "else" tag
-     *
-     * @return string
-     */
-    public function getEchoElse()
+    /** Print "else" tag. */
+    public function getEchoElse(): string
     {
         return '{% else %}';
     }
 
-    /**
-     * Print "endif" tag
-     *
-     * @return string
-     */
-    public function getEchoEndIf()
+    /** Print "endif" tag. */
+    public function getEchoEndIf(): string
     {
         return '{% endif %}';
     }
 
-    /**
-     * Print "print" tag with $str as printed value. Value is printed unquoted.
-     *
-     * @param $str
-     * @return string
-     */
-    public function getEchoTwig($str)
+    /** Print "print" tag with $str as printed value. Value is printed unquoted. */
+    public function getEchoTwig(mixed $str): string
     {
         return sprintf('{{ %s }}', $str);
     }
@@ -171,13 +134,8 @@ class TwigPrintExtension extends AbstractExtension
      *      => {{ myObjectValue|capitalize|striptags }}
      * {{ echo_twig_filter('myValue', ['capitalize', 'striptags'], true) }}
      *      => {{ 'myValue'|capitalize|striptags }}
-     *
-     * @param $str
-     * @param string|array|null $filters
-     * @param bool $asString
-     * @return string
      */
-    public function getEchoTwigFilter($str, $filters = null, $asString = false)
+    public function getEchoTwigFilter(mixed $str, string|array|null $filters = null, bool $asString = false): string
     {
         if (null === $filters) {
             return $this->getEchoTwig($str);
@@ -192,13 +150,8 @@ class TwigPrintExtension extends AbstractExtension
         );
     }
 
-    /**
-     * Print "block" tag with block name as $name
-     *
-     * @param $name
-     * @return string
-     */
-    public function getEchoBlock($name)
+    /** Print "block" tag with block name as $name. */
+    public function getEchoBlock(string $name): string
     {
         $this->blockNames[] = $name;
 
@@ -208,10 +161,8 @@ class TwigPrintExtension extends AbstractExtension
     /**
      * Print "endblock" tag for latest opened block.
      * Latest opened block name is precised.
-     *
-     * @return string
      */
-    public function getEchoEndBlock()
+    public function getEchoEndBlock(): string
     {
         return str_replace('%%name%%', array_pop($this->blockNames), '{% endblock %%name%% %}');
     }
@@ -219,11 +170,8 @@ class TwigPrintExtension extends AbstractExtension
     /**
      * Print "extends" tag extending $name template.
      * Template name will be automatically wrapped by quotes.
-     *
-     * @param $name
-     * @return string
      */
-    public function getEchoExtends($name)
+    public function getEchoExtends(string $name): string
     {
         return str_replace('%%name%%', $name, '{% extends "%%name%%" %}');
     }
@@ -239,13 +187,8 @@ class TwigPrintExtension extends AbstractExtension
      *      => {% for item in myListObject %}
      * {{ echo_for('item', 'myListObject', 'key') }}
      *      => {% for key,item in myListObject %}
-     *
-     * @param string $object
-     * @param string $in
-     * @param string $key
-     * @return string
      */
-    public function getEchoFor($object, $in, $key = null)
+    public function getEchoFor(string $object, string $in, string $key = null): string
     {
         return strtr(
             '{% for %%key%%%%object%% in %%in%% %}',
@@ -258,50 +201,40 @@ class TwigPrintExtension extends AbstractExtension
 
     /**
      * Print "endfor" tag
-     *
-     * @return string
      */
-    public function getEchoEndFor()
+    public function getEchoEndFor(): string
     {
         return '{% endfor %}';
     }
 
     /**
      * Print "raw" tag
-     *
-     * @return string
      */
-    public function getEchoRaw()
+    public function getEchoRaw(): string
     {
         return '{% raw %}';
     }
 
     /**
      * Print "endraw" tag
-     *
-     * @return string
      */
-    public function getEchoEndRaw()
+    public function getEchoEndRaw(): string
     {
         return '{% endraw %}';
     }
 
     /**
      * Print "spaceless" tag
-     *
-     * @return string
      */
-    public function getEchoSpaceless()
+    public function getEchoSpaceless(): string
     {
         return '{% apply spaceless %}';
     }
 
     /**
-     * Print "endspacelss" tag
-     *
-     * @return string
+     * Print "endspaceless" tag
      */
-    public function getEchoEndSpaceless()
+    public function getEchoEndSpaceless(): string
     {
         return '{% endapply %}';
     }
@@ -323,11 +256,11 @@ class TwigPrintExtension extends AbstractExtension
      *
      * @return string The parameters to be used in a URL
      */
-    public function getEchoTwigArr(array $arr)
+    public function getEchoTwigArr(array $arr): string
     {
         $contents = array();
         foreach ($arr as $key => $value) {
-            if (!strstr($value, '{{') || !strstr($value, '}}')) {
+            if (!str_contains($value, '{{') || !str_contains($value, '}}')) {
                 $value = "'$value'";
             } else {
                 $value = trim(str_replace(array('{{', '}}'), '', $value));
@@ -353,14 +286,12 @@ class TwigPrintExtension extends AbstractExtension
      * <code>
      * "{ a: 'b', c: 'd', e: f }"
      * </code>
-     *
-     * @return string
      */
-    public function getEchoTwigAssoc(array $arr)
+    public function getEchoTwigAssoc(array $arr): string
     {
         $contents = array();
         foreach ($arr as $key => $value) {
-            if (!strstr($value, '{{') || !strstr($value, '}}')) {
+            if (!str_contains($value, '{{') || !str_contains($value, '}}')) {
                 $value = "'$value'";
             } else {
                 $value = trim(str_replace(array('{{', '}}'), '', $value));
@@ -379,13 +310,8 @@ class TwigPrintExtension extends AbstractExtension
      * Example:
      *  {{ echo_include('myawesometemplate.html.twig', {'val1': 'myVal1'}, true) }}
      *      => {% include "myawesometemplate.html.twig" with {'val1': 'myVal1'} only %}
-     *
-     * @param $twig
-     * @param array $params
-     * @param bool $paramsOnly
-     * @return string
      */
-    public function getEchoInclude($twig, array $params = array(), $paramsOnly = false)
+    public function getEchoInclude(string $twig, array $params = [], bool $paramsOnly = false): string
     {
         return sprintf(
             '{%% include "%s" with %s %s%%}',
@@ -398,11 +324,8 @@ class TwigPrintExtension extends AbstractExtension
     /**
      * Print "use" tag for template $name. Template name will be automatically
      * wrapped by quotes.
-     *
-     * @param $name
-     * @return string
      */
-    public function getEchoUse($name)
+    public function getEchoUse(string $name): string
     {
         return str_replace('%%name%%', $name, '{% use \'%%name%%\' %}');
     }
@@ -410,21 +333,16 @@ class TwigPrintExtension extends AbstractExtension
     /**
      * Print block function call to the block $name.
      * $name will be automatically wrapped by quote.
-     *
-     * @param $name
-     * @return string
      */
-    public function getEchoPrintBlock($name)
+    public function getEchoPrintBlock(string $name): string
     {
         return str_replace('%%name%%', $name, '{{ block(\'%%name%%\') }}');
     }
 
     /**
      * Returns the name of the extension.
-     *
-     * @return string The extension name
      */
-    public function getName()
+    public function getName(): string
     {
         return 'twig_generator_twig_print';
     }

@@ -13,6 +13,9 @@ namespace TwigGenerator\Builder;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFilter;
+use TwigGenerator\Extension\ExtraFilterExtension;
+use TwigGenerator\Extension\PHPPrintExtension;
+use TwigGenerator\Extension\TwigPrintExtension;
 
 /**
  * @author Cédric Lombardot
@@ -22,225 +25,139 @@ abstract class BaseBuilder implements BuilderInterface
     /**
      * Default Twig file extension.
      */
-    const TWIG_EXTENSION = '.php.twig';
+    final protected const TWIG_EXTENSION = '.php.twig';
+
+    protected Generator $generator;
 
     /**
-     * @var \TwigGenerator\Builder\Generator    The generator.
+     * @var string[]   A list of template directories.
      */
-    protected $generator;
+    protected array $templateDirectories = [];
 
-    /**
-     * @var array   A list of template directories.
-     */
-    protected $templateDirectories = array();
+    protected string $templateName = '';
 
-    /**
-     * @var string
-     */
-    protected $templateName;
+    protected string $outputName = '';
 
-    /**
-     * @var string
-     */
-    protected $outputName;
+    protected bool $mustOverwriteIfExists = false;
 
-    /**
-     * @var Boolean
-     */
-    protected $mustOverwriteIfExists = false;
+    protected array $twigFilters = [];
 
-    /**
-     * @var array
-     */
-    protected $twigFilters = array(
-    );
+    protected array $variables = [];
 
-    /**
-     * @var array
-     */
-    protected $variables = array();
+    protected array $twigExtensions = [
+        PHPPrintExtension::class,
+        TwigPrintExtension::class,
+        ExtraFilterExtension::class,
+    ];
 
-    /**
-     * @var array
-     */
-    protected $twigExtensions = array(
-        '\\TwigGenerator\\Extension\\PHPPrintExtension',
-        '\\TwigGenerator\\Extension\\TwigPrintExtension',
-        '\\TwigGenerator\\Extension\\ExtraFilterExtension',
-    );
-
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         $this->templateDirectories = $this->getDefaultTemplateDirs();
         $this->templateName = $this->getDefaultTemplateName();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setGenerator(Generator $generator)
+    public function setGenerator(Generator $generator): void
     {
         $this->generator = $generator;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getGenerator()
+    public function getGenerator(): Generator
     {
         return $this->generator;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function addTemplateDir($templateDir)
+    public function addTemplateDir($templateDir): void
     {
         $this->templateDirectories[$templateDir] = $templateDir;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setTemplateDirs(array $templateDirs)
+    public function setTemplateDirs(array $templateDirs): void
     {
         $this->templateDirectories = $templateDirs;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getTemplateDirs()
+    /** @return string[] */
+    public function getTemplateDirs(): array
     {
         return $this->templateDirectories;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getDefaultTemplateDirs()
+    public function getDefaultTemplateDirs(): array
     {
-        return array();
+        return [];
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setTemplateName($templateName)
+    public function setTemplateName(string $templateName): void
     {
         $this->templateName = $templateName;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getTemplateName()
+    public function getTemplateName(): string
     {
         return $this->templateName;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getDefaultTemplateName()
+    public function getDefaultTemplateName(): string
     {
         return $this->getSimpleClassName() . self::TWIG_EXTENSION;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getSimpleClassName($class = null)
+    public function getSimpleClassName($class = null): string
     {
         if (null === $class) {
-            $class = get_class($this);
+            $class = self::class;
         }
 
         $classParts = explode('\\', $class);
-        $simpleClassName = array_pop($classParts);
-
-        return $simpleClassName;
+        return array_pop($classParts);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setOutputName($outputName)
+    public function setOutputName(string $outputName): void
     {
         $this->outputName = $outputName;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getOutputName()
+    public function getOutputName(): string
     {
         return $this->outputName;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function mustOverwriteIfExists()
+    public function mustOverwriteIfExists(): bool
     {
         return $this->mustOverwriteIfExists;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setMustOverwriteIfExists($status = true)
+    public function setMustOverwriteIfExists(bool $status = true): void
     {
         $this->mustOverwriteIfExists = $status;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setVariables(array $variables)
+    public function setVariables(array $variables): void
     {
         $this->variables = $variables;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setVariable($key, $value)
+    public function setVariable(string $key, mixed $value): void
     {
         $this->variables[$key] = $value;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getVariables()
+    public function getVariables(): array
     {
         return $this->variables;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function hasVariable($key)
+    public function hasVariable($key): bool
     {
         return isset($this->variables[$key]);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getVariable($key, $default = null)
+    public function getVariable(string $key, mixed $default = null): mixed
     {
         return $this->hasVariable($key) ? $this->variables[$key] : $default;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function writeOnDisk($outputDirectory)
+    public function writeOnDisk(string $outputDirectory): void
     {
         $path = $outputDirectory . DIRECTORY_SEPARATOR . $this->getOutputName();
         $dir  = dirname($path);
@@ -254,10 +171,7 @@ abstract class BaseBuilder implements BuilderInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getCode()
+    public function getCode(): string
     {
         $twig = $this->getTwigEnvironment();
         $template = $twig->load($this->getTemplateName());
@@ -268,10 +182,7 @@ abstract class BaseBuilder implements BuilderInterface
         return $template->render($variables);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function addTwigFilters(array $filters)
+    public function addTwigFilters(array $filters): void
     {
         foreach($filters as $filter) {
             if (is_string($filter)) {
@@ -283,10 +194,7 @@ abstract class BaseBuilder implements BuilderInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function addTwigExtensions(array $extensions)
+    public function addTwigExtensions(array $extensions): void
     {
         foreach($extensions as $extension) {
             if (is_string($extension)) {
@@ -301,10 +209,8 @@ abstract class BaseBuilder implements BuilderInterface
     /**
      * Initialize the Twig Environment which automatically loads
      * extensions and filters.
-     *
-     * @return Environment
      */
-    protected function getTwigEnvironment()
+    protected function getTwigEnvironment(): Environment
     {
         $loader = new FilesystemLoader($this->getTemplateDirs());
         $twig = new Environment($loader, array(
@@ -320,7 +226,7 @@ abstract class BaseBuilder implements BuilderInterface
         return $twig;
     }
 
-    protected function loadTwigFilters(Environment $twig)
+    protected function loadTwigFilters(Environment $twig): void
     {
         foreach ($this->twigFilters as $twigFilter) {
             if (is_object($twigFilter)) {
@@ -335,7 +241,7 @@ abstract class BaseBuilder implements BuilderInterface
         }
     }
 
-    protected function loadTwigExtensions(Environment $twig)
+    protected function loadTwigExtensions(Environment $twig): void
     {
         foreach ($this->twigExtensions as $twigExtensionName) {
             if (is_object($twigExtensionName)) {

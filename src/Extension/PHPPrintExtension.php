@@ -12,29 +12,22 @@ use Twig\TwigFilter;
  */
 class PHPPrintExtension extends AbstractExtension
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getFilters()
+    public function getFilters(): array
     {
         $options = ['is_safe' => ['html']];
-        return array(
-            'as_php'   => new TwigFilter('as_php'  , array($this, 'asPhp'), $options),
-            'php_name' => new TwigFilter('php_name', array($this, 'phpName'), $options),
-        );
+        return [
+            'as_php'   => new TwigFilter('as_php'  , $this->asPhp(...), $options),
+            'php_name' => new TwigFilter('php_name', $this->phpName(...), $options),
+        ];
     }
 
-    /**
-     * @param $variable
-     * @return string
-     */
-    public function asPhp($variable)
+    public function asPhp(mixed $variable): string
     {
-        if (!is_array($variable)) {
-            return $this->export($variable);
-        }
-
         $str = $this->export($variable);
+
+        if (!is_array($variable)) {
+            return $str;
+        }
 
         preg_match_all('/[^> ]+::__set_state\(array\((.+),\'loaded/i', $str, $matches);
 
@@ -58,34 +51,20 @@ class PHPPrintExtension extends AbstractExtension
         return $str;
     }
 
-    /**
-     * Converts string into valid PHP function name
-     *
-     * @param string $str
-     * @return string
-     */
-    public function phpName($str)
+    /** Converts string into valid PHP function name */
+    public function phpName(string $str): string
     {
         $str = preg_replace('/[^\w]+/', '', $str);
 
         return $str;
     }
 
-    /**
-     * @param mixed $variable
-     * @return string
-     */
-    private function export($variable)
+    private function export(mixed $variable): string
     {
         return str_replace(array("\n", 'array (', '     '), array('', 'array(', ''), var_export($variable, true));
     }
 
-    /**
-     * Returns the name of the extension.
-     *
-     * @return string The extension name
-     */
-    public function getName()
+    public function getName(): string
     {
         return 'twig_generator_php_print';
     }

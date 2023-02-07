@@ -7,8 +7,8 @@ use TwigGenerator\Builder\BaseBuilder;
 class DemoBuilder extends BaseBuilder
 {
 
-    public function getDefaultTemplateDirs()
+    public function getDefaultTemplateDirs(): array
     {
-        return array(__DIR__.'/../Templates');
+        return [__DIR__.'/../Templates'];
     }
 }
