@@ -15,7 +15,7 @@ namespace TwigGenerator\Builder;
  */
 class Generator
 {
-    final protected const TEMP_DIR_PREFIX = 'TwigGenerator';
+    protected const TEMP_DIR_PREFIX = 'TwigGenerator';
 
     protected string $tempDir;
 

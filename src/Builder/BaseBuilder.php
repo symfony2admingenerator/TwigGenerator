@@ -25,7 +25,7 @@ abstract class BaseBuilder implements BuilderInterface
     /**
      * Default Twig file extension.
      */
-    final protected const TWIG_EXTENSION = '.php.twig';
+    protected const TWIG_EXTENSION = '.php.twig';
 
     protected Generator $generator;
 
