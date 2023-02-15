@@ -99,13 +99,13 @@ abstract class BaseBuilder implements BuilderInterface
 
     public function getDefaultTemplateName(): string
     {
-        return $this->getSimpleClassName() . self::TWIG_EXTENSION;
+        return $this->getSimpleClassName() . $this::TWIG_EXTENSION;
     }
 
     public function getSimpleClassName($class = null): string
     {
         if (null === $class) {
-            $class = self::class;
+            $class = $this::class;
         }
 
         $classParts = explode('\\', $class);
