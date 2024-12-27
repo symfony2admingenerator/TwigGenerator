@@ -6,7 +6,7 @@ use TwigGenerator\Extension\PHPPrintExtension;
 /**
  * Test PHPPrintExtension class
  */
-class PHPPrintExtensionTest extends BaseExtensionTest
+class PHPPrintExtensionTestCase extends AbstractExtensionTestCase
 {
     protected function getTwigVariables(): array
     {

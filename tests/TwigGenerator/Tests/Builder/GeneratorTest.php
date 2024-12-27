@@ -2,10 +2,11 @@
 
 namespace TwigGenerator\Tests\Builder;
 
+use PHPUnit\Framework\TestCase;
 use TwigGenerator\Tests\Builder\Fixtures\Builder\DemoBuilder;
 use TwigGenerator\Builder\Generator;
 
-class GeneratorTest extends \PHPUnit_Framework_TestCase
+class GeneratorTest extends TestCase
 {
     public function testAddBuilder(): void
     {

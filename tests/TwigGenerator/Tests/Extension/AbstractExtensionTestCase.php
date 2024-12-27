@@ -1,6 +1,7 @@
 <?php
 namespace TwigGenerator\Tests\Extension;
 
+use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\Loader\ArrayLoader;
@@ -14,7 +15,7 @@ use Twig\Loader\ArrayLoader;
  * @package TwigGenerator\Tests\Extension
  * @author Stéphane Escandell
  */
-abstract class BaseExtensionTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractExtensionTestCase extends TestCase
 {
     /**
      * Variables used for templates
@@ -40,7 +41,7 @@ abstract class BaseExtensionTest extends \PHPUnit_Framework_TestCase
                 'Error: invalid test case. Templates and returns keys mismatch: templates:[%s], returns:[%s] => [%s]',
                 implode(', ', array_keys($templates)),
                 implode(', ', array_keys($returns)),
-                implode(', ', array_diff(array_keys($templates), array_keys($returns)))
+                implode(', ', array_diff(array_keys($templates), array_keys($returns))),
             ));
         }
         $twig = $this->getEnvironment($templates);
@@ -48,8 +49,8 @@ abstract class BaseExtensionTest extends \PHPUnit_Framework_TestCase
         foreach ($templates as $name => $tpl) {
             $this->assertEquals(
                 $returns[$name][0],
-                $twig->loadTemplate($name)->render($this->twigVariables),
-                $returns[$name][1]
+                $twig->render($name, $this->twigVariables),
+                $returns[$name][1],
             );
         }
     }

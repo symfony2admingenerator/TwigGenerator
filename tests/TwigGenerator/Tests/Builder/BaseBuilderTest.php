@@ -2,9 +2,10 @@
 
 namespace TwigGenerator\Tests\Builder;
 
+use PHPUnit\Framework\TestCase;
 use TwigGenerator\Tests\Builder\Fixtures\Builder\DemoBuilder;
 
-class BaseBuilderTest extends \PHPUnit_Framework_TestCase
+class BaseBuilderTest extends TestCase
 {
     public function testGetSimpleClassName(): void
     {

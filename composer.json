@@ -22,7 +22,7 @@
         "twig/twig": "^2.15.3||^3.4.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.3"
+        "phpunit/phpunit": "~11.5.2"
     },
     "autoload": {
         "psr-4": { "TwigGenerator\\": "src/" }
