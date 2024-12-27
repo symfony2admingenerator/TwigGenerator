@@ -74,8 +74,8 @@ class Generator
      */
     public function __destruct()
     {
-        if ($this->tempDir && is_dir($this->tempDir) && $this->autoRemoveTempDir) {
-            $this->removeDir($this->tempDir);
+        if ($this->getTempDir() && is_dir($this->getTempDir()) && $this->autoRemoveTempDir) {
+            $this->removeDir($this->getTempDir());
         }
     }
 
