@@ -28,8 +28,6 @@ class TwigPrintExtension extends AbstractExtension
             'echo_endfor'         => new TwigFunction('echo_endfor'      , $this->getEchoEndFor(...), $options),
             'echo_raw'            => new TwigFunction('echo_raw'         , $this->getEchoRaw(...), $options),
             'echo_endraw'         => new TwigFunction('echo_endraw'      , $this->getEchoEndRaw(...), $options),
-            'echo_spaceless'      => new TwigFunction('echo_spaceless'   , $this->getEchoSpaceless(...), $options),
-            'echo_endspaceless'   => new TwigFunction('echo_endspaceless', $this->getEchoEndSpaceless(...), $options),
             'echo_extends'        => new TwigFunction('echo_extends'     , $this->getEchoExtends(...), $options),
             'echo_if'             => new TwigFunction('echo_if'          , $this->getEchoIf(...), $options),
             'echo_else'           => new TwigFunction('echo_else'        , $this->getEchoElse(...), $options),
@@ -221,22 +219,6 @@ class TwigPrintExtension extends AbstractExtension
     public function getEchoEndRaw(): string
     {
         return '{% endraw %}';
-    }
-
-    /**
-     * Print "spaceless" tag
-     */
-    public function getEchoSpaceless(): string
-    {
-        return '{% apply spaceless %}';
-    }
-
-    /**
-     * Print "endspaceless" tag
-     */
-    public function getEchoEndSpaceless(): string
-    {
-        return '{% endapply %}';
     }
 
     /**
