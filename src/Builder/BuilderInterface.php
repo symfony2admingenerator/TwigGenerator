@@ -49,7 +49,7 @@ interface BuilderInterface
      *
      * @return string   The short classname.
      */
-    function getSimpleClassName(string $class = null): string;
+    function getSimpleClassName(?string $class = null): string;
 
     function setOutputName(string $outputName): void;
 

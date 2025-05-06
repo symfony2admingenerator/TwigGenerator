@@ -41,7 +41,7 @@ class Generator
      *
      * @param string|null $baseTempDir Existing base directory for temporary template files
      */
-    public function __construct(string $baseTempDir = null)
+    public function __construct(?string $baseTempDir = null)
     {
         if (null === $baseTempDir) {
             $baseTempDir = sys_get_temp_dir();
