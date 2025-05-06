@@ -186,7 +186,7 @@ class TwigPrintExtension extends AbstractExtension
      * {{ echo_for('item', 'myListObject', 'key') }}
      *      => {% for key,item in myListObject %}
      */
-    public function getEchoFor(string $object, string $in, string $key = null): string
+    public function getEchoFor(string $object, string $in, ?string $key = null): string
     {
         return strtr(
             '{% for %%key%%%%object%% in %%in%% %}',
